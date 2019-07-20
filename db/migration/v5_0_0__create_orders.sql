@@ -1,0 +1,13 @@
+CREATE TABLE orders (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    cashback FLOAT(4,2) NOT NULL
+) ENGINE=InnoDB CHARACTER SET utf8;
+
+CREATE TABLE order_records (
+    order_id BIGINT NOT NULL,
+    record_id BIGINT NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders (id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    FOREIGN KEY (record_id) REFERENCES records (id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    PRIMARY KEY (order_id, record_id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+

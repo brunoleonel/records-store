@@ -21,7 +21,7 @@ public class RecordController {
 
     @RequestMapping(path = "/{id}")
     public String getRecord(@PathVariable int id) {
-        return "getRecord: " + id ;
+        return "getRecords: " + id ;
     }
 
     @RequestMapping(path = "/index")

@@ -1,10 +1,12 @@
 package br.com.cashback.recordstore.resources.responses;
 
+import java.util.List;
+
 public class OrderResponse {
 
     private long id;
 
-    private RecordResponse record;
+    private List<RecordResponse> records;
 
     private float cashback;
 
@@ -16,12 +18,12 @@ public class OrderResponse {
         this.id = id;
     }
 
-    public RecordResponse getRecord() {
-        return record;
+    public List<RecordResponse> getRecords() {
+        return records;
     }
 
-    public void setRecord(RecordResponse record) {
-        this.record = record;
+    public void setRecords(List<RecordResponse> records) {
+        this.records = records;
     }
 
     public float getCashback() {

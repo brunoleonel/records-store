@@ -6,6 +6,8 @@ import br.com.cashback.recordstore.models.Record;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RecordService implements RecordServiceInterface {
 
@@ -13,7 +15,7 @@ public class RecordService implements RecordServiceInterface {
     private RecordRepositoryInterface recordRepository;
 
     @Override
-    public Record getRecordById(long id) {
-         return this.recordRepository.getOne(id);
+    public List<Record> getRecordsByIdIn(Long ...ids) {
+         return this.recordRepository.getRecordByIdIn(ids);
     }
 }
