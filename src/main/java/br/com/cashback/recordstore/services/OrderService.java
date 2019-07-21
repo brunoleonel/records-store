@@ -11,10 +11,16 @@ import br.com.cashback.recordstore.resources.requests.OrderRequest;
 import br.com.cashback.recordstore.resources.responses.OrderResponse;
 import br.com.cashback.recordstore.resources.responses.RecordResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,6 +45,7 @@ public class OrderService implements OrderServiceInterface {
         Order order = new Order();
         order.setCashback(totalCashback);
         order.setRecords(records);
+        order.setDate(LocalDate.now());
 
         this.orderRepository.save(order);
 
@@ -77,7 +84,22 @@ public class OrderService implements OrderServiceInterface {
         OrderResponse response = new OrderResponse();
         response.setRecords(recResponses);
         response.setCashback(totalCashback);
+        response.setDate(order.getDate());
         response.setId(order.getId());
         return response;
+    }
+
+    @Override
+    public OrderResponse getOrderById(long id) {
+        Optional<Order> result = orderRepository.findById(id);
+        Order order = result.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));
+        return prepareResponse(order.getCashback(), order);
+    }
+
+    @Override
+    public Page<OrderResponse> getOrdersByDateRange(LocalDate initialDate, LocalDate finalDate, Pageable pageable) {
+        Page<Order> orders = orderRepository.findAllOrderByDateBetweenOrderByDateDesc(initialDate, finalDate, pageable);
+        Page<OrderResponse> orderResponsePage = orders.map(order -> prepareResponse(order.getCashback(), order));
+        return orderResponsePage;
     }
 }

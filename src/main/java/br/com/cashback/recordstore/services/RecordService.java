@@ -3,6 +3,7 @@ package br.com.cashback.recordstore.services;
 import br.com.cashback.recordstore.infrastructure.repositories.RecordRepositoryInterface;
 import br.com.cashback.recordstore.infrastructure.services.RecordServiceInterface;
 import br.com.cashback.recordstore.models.Record;
+import br.com.cashback.recordstore.resources.responses.RecordResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,23 +24,26 @@ public class RecordService implements RecordServiceInterface {
 
     @Override
     public List<Record> getRecordsByIdIn(Long ...ids) {
-         return this.recordRepository.getRecordByIdIn(ids);
+        return recordRepository.getRecordByIdIn(ids);
     }
 
     @Override
-    public Record getRecordById(long id) {
+    public RecordResponse getRecordById(long id) {
         Optional<Record> result = recordRepository.findById(id);
-        return result.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Record not found"));
+        Record record = result.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Record not found"));
+        return new RecordResponse(record);
     }
 
     @Override
-    public Page<Record> getRecords(String genre, Pageable pageable) {
+    public Page<RecordResponse> getRecords(String genre, Pageable pageable) {
         if (genre != null) {
-            return recordRepository.getRecordsByGenreOrderByTitle(genre, pageable);
+            Page<Record> records = recordRepository.getRecordsByGenreOrderByTitle(genre, pageable);
+            return records.map(record -> new RecordResponse(record));
         }
 
         Sort sort = Sort.by("title");
         Pageable genericPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
-        return recordRepository.findAll(genericPageable);
+        Page<Record> records = recordRepository.findAll(genericPageable);
+        return records.map(record -> new RecordResponse(record));
     }
 }

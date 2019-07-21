@@ -1,6 +1,7 @@
 CREATE TABLE orders (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    cashback FLOAT(4,2) NOT NULL
+    cashback FLOAT(4,2) NOT NULL,
+    date TIMESTAMP NOT NULL
 ) ENGINE=InnoDB CHARACTER SET utf8;
 
 CREATE TABLE order_records (

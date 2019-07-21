@@ -1,6 +1,7 @@
 package br.com.cashback.recordstore.models;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -20,6 +21,8 @@ public class Order {
         inverseJoinColumns = @JoinColumn(name = "record_id")
     )
     private List<Record> records;
+
+    private LocalDate date;
 
     public long getId() {
         return id;
@@ -43,5 +46,13 @@ public class Order {
 
     public void setRecords(List<Record> records) {
         this.records = records;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }

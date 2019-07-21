@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface RecordRepositoryInterface extends JpaRepository<Record, Long> {
     List<Record> getRecordByIdIn(Long ...ids);
-    Page getRecordsByGenreOrderByTitle(String genre, Pageable pageable);
+    Page<Record> getRecordsByGenreOrderByTitle(String genre, Pageable pageable);
 }
