@@ -7,7 +7,7 @@ public class OrderResponse {
 
     private long id;
 
-    private List<RecordResponse> records;
+    private List<OrderRecordResponse> records;
 
     private float cashback;
 
@@ -21,11 +21,11 @@ public class OrderResponse {
         this.id = id;
     }
 
-    public List<RecordResponse> getRecords() {
+    public List<OrderRecordResponse> getRecords() {
         return records;
     }
 
-    public void setRecords(List<RecordResponse> records) {
+    public void setRecords(List<OrderRecordResponse> records) {
         this.records = records;
     }
 

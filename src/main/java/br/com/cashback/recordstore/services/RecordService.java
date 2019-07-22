@@ -23,12 +23,12 @@ public class RecordService implements RecordServiceInterface {
     private RecordRepositoryInterface recordRepository;
 
     @Override
-    public List<Record> getRecordsByIdIn(Long ...ids) {
+    public List<Record> getRecordsByIdIn(String ...ids) {
         return recordRepository.getRecordByIdIn(ids);
     }
 
     @Override
-    public RecordResponse getRecordById(long id) {
+    public RecordResponse getRecordById(String id) {
         Optional<Record> result = recordRepository.findById(id);
         Record record = result.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Record not found"));
         return new RecordResponse(record);

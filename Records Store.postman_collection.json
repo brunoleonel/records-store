@@ -1,0 +1,173 @@
+{
+	"info": {
+		"_postman_id": "33ccfada-8f13-4b63-95e9-c44f9bff8197",
+		"name": "Records Store",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Records",
+			"item": [
+				{
+					"name": "All Records",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/records?",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"records"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "count",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "genre",
+									"value": "rock",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Record",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/records/0aA9rYw8PEv9G7tVIJ9dKg",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"records",
+								"0aA9rYw8PEv9G7tVIJ9dKg"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sync records with Spotify",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/records",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"records"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "All orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/orders?",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"orders"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "2019-02-01",
+									"disabled": true
+								},
+								{
+									"key": "to",
+									"value": "2019-06-30",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "count",
+									"value": "10",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Order",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/orders/10",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"orders",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"records\": [\n\t\t{\n\t\t\t\"record_id\": \"0aA9rYw8PEv9G7tVIJ9dKg\"\n\t\t},\n\t\t{\n\t\t\t\"record_id\": \"7xY34kpisIxOv8WMnNN8wg\"\n\t\t}\n\t]\n}"
+						},
+						"url": {
+							"raw": "{{host}}/orders",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

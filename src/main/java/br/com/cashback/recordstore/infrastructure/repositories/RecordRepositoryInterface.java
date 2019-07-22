@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface RecordRepositoryInterface extends JpaRepository<Record, Long> {
-    List<Record> getRecordByIdIn(Long ...ids);
+public interface RecordRepositoryInterface extends JpaRepository<Record, String> {
+    List<Record> getRecordByIdIn(String ...ids);
     Page<Record> getRecordsByGenreOrderByTitle(String genre, Pageable pageable);
 }

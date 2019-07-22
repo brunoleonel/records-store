@@ -5,9 +5,12 @@ import br.com.cashback.recordstore.infrastructure.services.CashbackIndexServiceI
 import br.com.cashback.recordstore.infrastructure.services.OrderServiceInterface;
 import br.com.cashback.recordstore.infrastructure.services.RecordServiceInterface;
 import br.com.cashback.recordstore.models.Order;
+import br.com.cashback.recordstore.models.OrderRecord;
+import br.com.cashback.recordstore.models.OrderRecordId;
 import br.com.cashback.recordstore.models.Record;
 import br.com.cashback.recordstore.resources.requests.OrderItemRequest;
 import br.com.cashback.recordstore.resources.requests.OrderRequest;
+import br.com.cashback.recordstore.resources.responses.OrderRecordResponse;
 import br.com.cashback.recordstore.resources.responses.OrderResponse;
 import br.com.cashback.recordstore.resources.responses.RecordResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,19 +37,23 @@ public class OrderService implements OrderServiceInterface {
     @Autowired
     private OrderRepositoryInterface orderRepository;
 
+    private Map<String, Float> cashbackIndexes;
+
     @Transactional
     @Override
     public OrderResponse createOrder(OrderRequest orderRequest) {
 
         List<Record> records = getOrderRecords(orderRequest.getRecords());
+
+        this.cashbackIndexes = getCashbackIndexes(records);
         float totalCashback = getTotalCashback(records);
 
         Order order = new Order();
         order.setCashback(totalCashback);
-        order.setRecords(records);
         order.setDate(LocalDate.now());
-
         this.orderRepository.save(order);
+
+        saveOrderRecords(order, records);
 
         OrderResponse response = prepareResponse(totalCashback, order);
 
@@ -57,7 +63,7 @@ public class OrderService implements OrderServiceInterface {
     private Float getTotalCashback(List<Record> records) {
         return records.stream()
             .map(record -> {
-                float cashbackIndex = this.cashbackIndexService.getCashBackIndexByGenreForDayOfWeek(record.getGenre());
+                float cashbackIndex = this.cashbackIndexes.get(record.getGenre());
                 float recordCashback = record.getPrice() * cashbackIndex;
                 return recordCashback;
             })
@@ -65,24 +71,23 @@ public class OrderService implements OrderServiceInterface {
     }
 
     private List<Record> getOrderRecords(List<OrderItemRequest> orderItems) {
-        List<Long> recordIds = orderItems
+        List<String> recordIds = orderItems
                 .stream()
                 .map(item -> item.getRecordId())
                 .collect(Collectors.toList());
 
-        Long[] ids = recordIds.toArray(new Long[recordIds.size()]);
+        String[] ids = recordIds.toArray(new String[recordIds.size()]);
         List<Record> records = this.recordService.getRecordsByIdIn(ids);
         return records;
     }
 
     private OrderResponse prepareResponse(float totalCashback, Order order) {
-        List<Record> records = order.getRecords();
-        List<RecordResponse> recResponses = records.stream()
-                .map(record -> new RecordResponse(record))
+        List<OrderRecordResponse> records = order.getOrderRecords().stream()
+                .map(oRec -> new OrderRecordResponse(oRec.getRecord(), oRec.getCashback()))
                 .collect(Collectors.toList());
 
         OrderResponse response = new OrderResponse();
-        response.setRecords(recResponses);
+        response.setRecords(records);
         response.setCashback(totalCashback);
         response.setDate(order.getDate());
         response.setId(order.getId());
@@ -101,5 +106,32 @@ public class OrderService implements OrderServiceInterface {
         Page<Order> orders = orderRepository.findAllOrderByDateBetweenOrderByDateDesc(initialDate, finalDate, pageable);
         Page<OrderResponse> orderResponsePage = orders.map(order -> prepareResponse(order.getCashback(), order));
         return orderResponsePage;
+    }
+
+    private Map<String, Float> getCashbackIndexes(List<Record> records) {
+        return records.stream()
+            .collect(
+                Collectors.toMap(
+                    rec -> rec.getGenre(),
+                    rec -> cashbackIndexService.getCashBackIndexByGenreForDayOfWeek(rec.getGenre())
+                )
+            );
+    }
+
+    private void saveOrderRecords(Order order, List<Record> records) {
+        List<OrderRecord> orderRecords = records.stream()
+                .map(record -> {
+                    OrderRecord ord = new OrderRecord();
+                    ord.setCashback(record.getPrice() * this.cashbackIndexes.get(record.getGenre()));
+                    ord.setId(new OrderRecordId(order.getId(), record.getId()));
+                    ord.setRecord(record);
+                    ord.setOrder(order);
+                    return ord;
+                })
+                .collect(Collectors.toList());
+
+        order.setOrderRecords(orderRecords);
+
+        this.orderRepository.save(order);
     }
 }

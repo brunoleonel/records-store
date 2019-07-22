@@ -14,13 +14,8 @@ public class Order {
 
     private float cashback;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "order_records",
-        joinColumns = @JoinColumn(name = "order_id"),
-        inverseJoinColumns = @JoinColumn(name = "record_id")
-    )
-    private List<Record> records;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "order")
+    private List<OrderRecord> orderRecords;
 
     private LocalDate date;
 
@@ -40,12 +35,12 @@ public class Order {
         this.cashback = cashback;
     }
 
-    public List<Record> getRecords() {
-        return records;
+    public List<OrderRecord> getOrderRecords() {
+        return orderRecords;
     }
 
-    public void setRecords(List<Record> records) {
-        this.records = records;
+    public void setOrderRecords(List<OrderRecord> orderRecords) {
+        this.orderRecords = orderRecords;
     }
 
     public LocalDate getDate() {

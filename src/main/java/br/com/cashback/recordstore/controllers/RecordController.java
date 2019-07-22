@@ -35,7 +35,7 @@ public class RecordController {
     }
 
     @RequestMapping(path = "/{id}")
-    public RecordResponse getRecord(@PathVariable long id) {
+    public RecordResponse getRecord(@PathVariable String id) {
         return recordService.getRecordById(id);
     }
 
