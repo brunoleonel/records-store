@@ -4,7 +4,7 @@ import br.com.cashback.recordstore.models.Record;
 
 public class RecordResponse {
 
-    private long id;
+    private String id;
     private String title;
     private float price;
     private String genre;
@@ -16,7 +16,7 @@ public class RecordResponse {
         this.genre = record.getGenre();
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class CashbackIndexService implements CashbackIndexServiceInterface {
@@ -18,6 +19,11 @@ public class CashbackIndexService implements CashbackIndexServiceInterface {
         String day = this.getDayOfWeek();
         float cashbackIndex = this.cashbackIndexRepository.getCashbackIndexByGenreForDayOfWeek(genre, day);
         return cashbackIndex;
+    }
+
+    @Override
+    public List<String> getGenres() {
+        return cashbackIndexRepository.getGenres();
     }
 
     private String getDayOfWeek() {

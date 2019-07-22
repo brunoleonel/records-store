@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 @Repository
 public class CashbackIndexRepository implements CashbackIndexRepositoryInterface {
@@ -27,5 +28,12 @@ public class CashbackIndexRepository implements CashbackIndexRepositoryInterface
         tQuery.setParameter("genre", genre);
         final Float result = tQuery.getSingleResult();
         return result;
+    }
+
+    @Override
+    public List<String> getGenres() {
+        TypedQuery<String> query = this.em.createQuery("SELECT c.genre FROM CashbackIndex c", String.class);
+        List<String> genres = query.getResultList();
+        return genres;
     }
 }

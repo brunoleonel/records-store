@@ -46,4 +46,19 @@ public class RecordService implements RecordServiceInterface {
         Page<Record> records = recordRepository.findAll(genericPageable);
         return records.map(record -> new RecordResponse(record));
     }
+
+    @Override
+    public void saveAll(List<Record> records) {
+        recordRepository.saveAll(records);
+    }
+
+    @Override
+    public void checkRecordsAbscence() {
+        long count = recordRepository.count();
+        if (count > 0) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Records already synchronized");
+        }
+    }
+
+
 }

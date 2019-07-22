@@ -1,7 +1,7 @@
 package br.com.cashback.recordstore.controllers;
 
 import br.com.cashback.recordstore.infrastructure.services.RecordServiceInterface;
-import br.com.cashback.recordstore.models.Record;
+import br.com.cashback.recordstore.infrastructure.services.SpotifyServiceInterface;
 import br.com.cashback.recordstore.resources.responses.RecordResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +17,9 @@ public class RecordController {
 
     @Autowired
     private RecordServiceInterface recordService;
+
+    @Autowired
+    private SpotifyServiceInterface spotifyService;
 
     @RequestMapping(method = RequestMethod.GET)
     public Page<RecordResponse> getRecords(
@@ -34,5 +37,10 @@ public class RecordController {
     @RequestMapping(path = "/{id}")
     public RecordResponse getRecord(@PathVariable long id) {
         return recordService.getRecordById(id);
+    }
+
+    @RequestMapping(method = RequestMethod.PATCH)
+    public void updateRecords() {
+        spotifyService.syncWithSpotify();
     }
 }

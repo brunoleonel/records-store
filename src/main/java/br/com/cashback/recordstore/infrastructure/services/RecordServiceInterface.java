@@ -11,4 +11,6 @@ public interface RecordServiceInterface {
     List<Record> getRecordsByIdIn(Long ...ids);
     RecordResponse getRecordById(long id);
     Page<RecordResponse> getRecords(String genre, Pageable pageable);
+    void saveAll(List<Record> records);
+    void checkRecordsAbscence();
 }
