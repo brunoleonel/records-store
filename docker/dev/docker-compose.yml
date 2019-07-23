@@ -15,7 +15,6 @@ services:
       - db
     environment:
       - SPRING_PROFILES_ACTIVE=local
-    command: mvn flyway:migrate -Dflyway.configFiles=flywaydb-local.conf
   db:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
