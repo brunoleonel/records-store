@@ -1,7 +1,6 @@
 FROM maven:3.6.1-jdk-8-slim
 WORKDIR /usr/src/java-code
 COPY . /usr/src/java-code/
-RUN mvn flyway:clean -Dflyway.configFiles=flywaydb-prod.conf
 RUN mvn package -DskipTests
 
 WORKDIR /usr/src/java-app

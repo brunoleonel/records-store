@@ -4,6 +4,7 @@ services:
   web:
     image: brunoleonel/records-store
     container_name: recordstore-web
+    restart: always
     depends_on:
       - db
     ports:
@@ -12,6 +13,7 @@ services:
       - db
     environment:
       - SPRING_PROFILES_ACTIVE=prod
+    command: mvn flyway:migrate -Dflyway.configFiles=flywaydb-prod.conf
   db:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
