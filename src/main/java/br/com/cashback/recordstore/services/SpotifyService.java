@@ -4,6 +4,7 @@ import br.com.cashback.recordstore.infrastructure.services.CashbackIndexServiceI
 import br.com.cashback.recordstore.infrastructure.services.RecordServiceInterface;
 import br.com.cashback.recordstore.infrastructure.services.SpotifyServiceInterface;
 import br.com.cashback.recordstore.models.Record;
+import br.com.cashback.recordstore.repositories.CashbackIndexRepository;
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.model_objects.credentials.ClientCredentials;
 import com.wrapper.spotify.model_objects.specification.AlbumSimplified;
@@ -116,7 +117,7 @@ public class SpotifyService implements SpotifyServiceInterface {
         return 1f + (rand.nextFloat() * 29f);
     }
 
-    public List<Record> getRecordListFromSpotifyResult(Paging<AlbumSimplified> albums, String genre) {
+    private List<Record> getRecordListFromSpotifyResult(Paging<AlbumSimplified> albums, String genre) {
         return Arrays.stream(albums.getItems())
             .map(album -> {
                 Record record = new Record();
@@ -127,5 +128,15 @@ public class SpotifyService implements SpotifyServiceInterface {
                 return record;
             })
             .collect(Collectors.toList());
+    }
+
+    public void setDependencies(
+        RecordServiceInterface recordService,
+        CashbackIndexServiceInterface cashbackIndexService,
+        SpotifyApi.Builder spotifyApiBuilder
+    ) {
+        this.recordService = recordService;
+        this.cashbackIndexService = cashbackIndexService;
+        this.spotifyApiBuilder = spotifyApiBuilder;
     }
 }

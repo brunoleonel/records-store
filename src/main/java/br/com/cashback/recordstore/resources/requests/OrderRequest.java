@@ -11,4 +11,8 @@ public class OrderRequest {
     public List<OrderItemRequest> getRecords() {
         return records;
     }
+
+    public void setRecords(List<OrderItemRequest> records) {
+        this.records = records;
+    }
 }

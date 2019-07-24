@@ -2,6 +2,7 @@ package br.com.cashback.recordstore.services;
 
 import br.com.cashback.recordstore.infrastructure.repositories.CashbackIndexRepositoryInterface;
 import br.com.cashback.recordstore.infrastructure.services.CashbackIndexServiceInterface;
+import br.com.cashback.recordstore.repositories.CashbackIndexRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,5 +31,9 @@ public class CashbackIndexService implements CashbackIndexServiceInterface {
         LocalDate now = LocalDate.now();
         String day = String.valueOf(now.getDayOfWeek());
         return day.toLowerCase();
+    }
+
+    public void setCashbackIndexRepository(CashbackIndexRepositoryInterface cashbackIndexRepository) {
+        this.cashbackIndexRepository = cashbackIndexRepository;
     }
 }

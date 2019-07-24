@@ -60,5 +60,7 @@ public class RecordService implements RecordServiceInterface {
         }
     }
 
-
+    public void setRecordRepository(RecordRepositoryInterface recordRepository) {
+        this.recordRepository = recordRepository;
+    }
 }
