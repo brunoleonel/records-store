@@ -1,14 +1,14 @@
-#Records Store API
-####Records Store API  with cashback calculation
+# Records Store API
+#### Records Store API  with cashback calculation
 
-_Powered by:_
+_***Powered by***:_
 
  * [Java8](https://openjdk.java.net/projects/jdk8/)
  * [Spring Boot 2.1](https://spring.io/projects/spring-boot)
  * [Flyway](https://flywaydb.org/)
  * [Spotify web API Java](https://github.com/thelinmichael/spotify-web-api-java) 
 
-_Running the project:_
+_***Running the project***:_
 
 * Download the project 
 
@@ -19,6 +19,12 @@ _Running the project:_
 * Build application with: mvn compile
 
 * Execute the migrations with: mvn flyway:migrate -Dflyway.configFiles=flywaydb-prod.conf
+
+_***Executing the tests***:_
+
+* Run mvn compile
+
+* Run mvn test jacoco:report
 
 Postman collection included for testing requests: **Records Store.postman_collection.json**
 

@@ -12,7 +12,6 @@ import br.com.cashback.recordstore.resources.requests.OrderItemRequest;
 import br.com.cashback.recordstore.resources.requests.OrderRequest;
 import br.com.cashback.recordstore.resources.responses.OrderRecordResponse;
 import br.com.cashback.recordstore.resources.responses.OrderResponse;
-import br.com.cashback.recordstore.resources.responses.RecordResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -133,5 +134,15 @@ public class OrderService implements OrderServiceInterface {
         order.setOrderRecords(orderRecords);
 
         this.orderRepository.save(order);
+    }
+
+    public void setDependencies(
+        RecordServiceInterface recordService,
+        CashbackIndexServiceInterface cashbackIndexService,
+        OrderRepositoryInterface orderRepository
+    ) {
+        this.recordService = recordService;
+        this.cashbackIndexService = cashbackIndexService;
+        this.orderRepository = orderRepository;
     }
 }
