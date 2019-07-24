@@ -26,6 +26,8 @@ _***Executing the tests***:_
 
 * Run mvn test jacoco:report
 
+* The code coverage report will be generated at target/site/jacoco/index.html
+
 Postman collection included for testing requests: **Records Store.postman_collection.json**
 
 
